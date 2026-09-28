@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ThreatLens — See the whole attack, not just the alerts</title>
+<meta name="description" content="ThreatLens is a unified security threat analysis platform that correlates endpoint, network, cloud and identity telemetry into prioritized, explainable cases.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>🔍</text></svg>">
+<style>
+:root{--bg:#0b1020;--panel:#121a30;--line:#22304f;--text:#e8edf7;--mute:#93a1bd;--acc:#3ee6c4;--acc2:#5b8cff;--crit:#ff5c6c;--high:#ff9f43;--med:#f6d365}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font:16px/1.6 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;z-index:10;background:rgba(11,16,32,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-weight:800;font-size:20px;letter-spacing:.5px}.logo span{color:var(--acc)}
+.links{display:flex;gap:26px;color:var(--mute);font-size:15px}.links a:hover{color:var(--text)}
+.btn{display:inline-block;padding:11px 20px;border-radius:10px;font-weight:600;font-size:15px;border:1px solid var(--line);transition:.2s}
+.btn.p{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#04121a;border:0}
+.btn.p:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(62,230,196,.25)}
+.btn:hover{border-color:var(--acc)}
+.hero{padding:84px 0 64px;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.tag{display:inline-block;font-size:13px;color:var(--acc);border:1px solid var(--line);padding:5px 12px;border-radius:99px;margin-bottom:20px}
+h1{font-size:clamp(34px,5vw,56px);line-height:1.1;letter-spacing:-1px}
+h1 em{font-style:normal;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--mute);font-size:18px;margin:20px 0 28px;max-width:540px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.trust{margin-top:28px;font-size:13px;color:var(--mute)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+.card h4{font-size:13px;color:var(--mute);font-weight:600;margin-bottom:14px;display:flex;justify-content:space-between}
+.live{color:var(--acc)}
+.step{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--line);font-size:14px}
+.step:first-of-type{border-top:0}
+.step small{display:block;color:var(--mute);font-size:12px}
+.pill{margin-left:auto;font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.Medium{background:rgba(246,211,101,.15);color:var(--med)}.High{background:rgba(255,159,67,.15);color:var(--high)}.Critical{background:rgba(255,92,108,.18);color:var(--crit)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.stats div{background:var(--bg);border-radius:10px;padding:10px;text-align:center;font-size:12px;color:var(--mute)}
+.stats b{display:block;font-size:20px;color:var(--text)}
+section{padding:72px 0}
+.eyebrow{color:var(--acc);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase}
+h2{font-size:clamp(28px,4vw,40px);line-height:1.2;margin:10px 0 12px;letter-spacing:-.5px}
+.sub{color:var(--mute);max-width:640px;margin-bottom:40px}
+.grid{display:grid;gap:18px}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}
+.grid .card h3{font-size:17px;margin:6px 0}
+.grid .card p{color:var(--mute);font-size:14.5px}
+.num{color:var(--acc);font-weight:800;font-size:14px}
+.ico{font-size:24px}
+.band{background:#0e1529;border-block:1px solid var(--line)}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.flow .card{position:relative}
+.price{font-size:26px;font-weight:800;margin:10px 0}
+.card ul{list-style:none;margin:14px 0 20px;font-size:14.5px;color:var(--mute)}
+.card li{padding:5px 0}.card li:before{content:"✓ ";color:var(--acc)}
+.feat{border-color:var(--acc)}
+.badge{font-size:11px;background:var(--acc);color:#04121a;padding:3px 9px;border-radius:99px;font-weight:700}
+details{border-bottom:1px solid var(--line);padding:18px 0}
+summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between}
+summary::after{content:"+";color:var(--acc);font-size:20px}
+details[open] summary::after{content:"–"}
+details p{color:var(--mute);margin-top:10px;max-width:760px}
+.final{text-align:center;padding:80px 24px;border-radius:20px;background:radial-gradient(circle at 50% 0,rgba(91,140,255,.22),transparent 65%),var(--panel);border:1px solid var(--line)}
+.final p{color:var(--mute);margin:12px auto 26px;max-width:520px}
+footer{padding:48px 0 32px;color:var(--mute);font-size:14px}
+.fcols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px}
+.fcols h5{color:var(--text);font-size:14px;margin-bottom:10px}.fcols a{display:block;padding:3px 0}.fcols a:hover{color:var(--acc)}
+.copy{border-top:1px solid var(--line);padding-top:20px;font-size:13px}
+@media(max-width:900px){.hero,.g4,.g3,.flow,.fcols{grid-template-columns:1fr}.links{display:none}.hero{padding-top:48px}}
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <a class="logo" href="#top">Threat<span>Lens</span></a>
+  <div class="links"><a href="#problem">Platform</a><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Editions</a><a href="#faq">FAQ</a></div>
+  <a class="btn p" href="#demo">Request a demo</a>
+</div></nav>
+
+<main id="top">
+<div class="wrap hero">
+  <div>
+    <span class="tag">● Unified Security Threat Analysis</span>
+    <h1>See the whole attack — <em>not just the alerts.</em></h1>
+    <p class="lead">ThreatLens unifies endpoint, network, cloud and identity telemetry, correlates it into coherent attack narratives, and gives your analysts prioritized, explainable cases instead of a flood of raw log lines.</p>
+    <div class="cta"><a class="btn p" href="#demo">Request a demo</a><a class="btn" href="#how">See how it works →</a></div>
+    <p class="trust">Built for SOC teams · Security architects · MSSPs · Regulated industries</p>
+  </div>
+  <div class="card" aria-label="Example correlated case">
+    <h4><span>CASE #TL-2041 · Credential compromise</span><span class="live">● Correlating</span></h4>
+    <div class="step"><span class="ico">🔐</span><div>Anomalous login<small>Unusual country, 03:12 local time</small></div><span class="pill Medium">Medium</span></div>
+    <div class="step"><span class="ico">🗄️</span><div>First-ever access to file server<small>Asset criticality: high</small></div><span class="pill High">High</span></div>
+    <div class="step"><span class="ico">🌐</span><div>Outbound connection to known-bad IP<small>Threat intel match, confidence 92%</small></div><span class="pill High">High</span></div>
+    <div class="step"><span class="ico">🚨</span><div><b>Correlated into one case</b><small>Recommended: suspend account, isolate host</small></div><span class="pill Critical">Critical</span></div>
+    <div class="stats"><div><b>3→1</b>alerts merged</div><div><b>&lt;5 min</b>detection latency</div><div><b>15 min</b>critical SLA</div></div>
+  </div>
+</div>
+
+<section id="problem"><div class="wrap">
+  <span class="eyebrow">The problem</span>
+  <h2>Your tools each see a piece. Attackers use the whole picture.</h2>
+  <p class="sub">Security teams stitch together partial visibility from a dozen consoles while alert volume grows faster than headcount.</p>
+  <div class="grid g4">
+    <div class="card"><span class="num">01</span><h3>Fragmented telemetry</h3><p>Every tool has its own data model, console and query language. One login investigation can mean pivoting across six interfaces.</p></div>
+    <div class="card"><span class="num">02</span><h3>Alert fatigue</h3><p>Low-fidelity alerts and duplicates bury genuine incidents, and analysts can't investigate everything.</p></div>
+    <div class="card"><span class="num">03</span><h3>Analyst shortage</h3><p>Understaffed SOCs and repetitive triage drive burnout and turnover.</p></div>
+    <div class="card"><span class="num">04</span><h3>Long dwell time</h3><p>Stolen credentials and living-off-the-land attacks slip past signatures for weeks.</p></div>
+  </div>
+</div></section>
+
+<section id="features" class="band"><div class="wrap">
+  <span class="eyebrow">The platform</span>
+  <h2>One analysis layer above your existing security stack</h2>
+  <p class="sub">Source-agnostic by design: ThreatLens complements the tools you already run rather than replacing them.</p>
+  <div class="grid g3">
+    <div class="card"><div class="ico">📡</div><h3>Unified telemetry ingestion</h3><p>Pre-built connectors plus a generic ingestion API bring endpoint, network, cloud, identity, email and SaaS data into one Unified Event Model.</p></div>
+    <div class="card"><div class="ico">🧠</div><h3>Behavioral analytics (UEBA)</h3><p>Rolling baselines for users, hosts and service accounts surface deviations from their own history and peer groups.</p></div>
+    <div class="card"><div class="ico">🛰️</div><h3>Threat intelligence matching</h3><p>Curated feeds are matched against telemetry in near real time, weighted by confidence and recency.</p></div>
+    <div class="card"><div class="ico">🔗</div><h3>Automated case building</h3><p>Entity resolution and attack-chain correlation turn scattered findings into a single timeline mapped to an attack framework.</p></div>
+    <div class="card"><div class="ico">⚡</div><h3>Guided &amp; automated response</h3><p>Isolate hosts, suspend accounts or block IPs with approval workflows and rollback, so you set the automation level.</p></div>
+    <div class="card"><div class="ico">🔎</div><h3>Explainable detections</h3><p>Every finding shows its evidence and top contributing factors in plain language. No black-box verdicts.</p></div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <span class="eyebrow">How it works</span>
+  <h2>From raw telemetry to contained incident</h2>
+  <p class="sub">Five independent layers, so you can start with a few data sources and expand without re-architecting.</p>
+  <div class="flow">
+    <div class="card"><span class="num">01</span><h3>Collect</h3><p>Lightweight agents, syslog and API connectors with local buffering.</p></div>
+    <div class="card"><span class="num">02</span><h3>Normalize</h3><p>Events mapped to the UEM and enriched with asset, user and geo context.</p></div>
+    <div class="card"><span class="num">03</span><h3>Detect</h3><p>Rules, ML anomaly detection and threat intel run in parallel.</p></div>
+    <div class="card"><span class="num">04</span><h3>Correlate</h3><p>Findings grouped into cases and scored by severity and confidence.</p></div>
+    <div class="card"><span class="num">05</span><h3>Respond</h3><p>Playbooks, ticketing sync and an immutable audit trail.</p></div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <span class="eyebrow">Use cases</span>
+  <h2>Built for the attacks that evade signatures</h2>
+  <p class="sub">Illustrative scenarios drawn from typical deployment patterns.</p>
+  <div class="grid g4">
+    <div class="card"><h3>Credential compromise</h3><p>Anomalous login, new resource access and a threat-intel hit merged into one critical case.</p></div>
+    <div class="card"><h3>Cloud misconfiguration</h3><p>Links an exposed bucket to the suspicious reads that followed, revealing root cause.</p></div>
+    <div class="card"><h3>Insider exfiltration</h3><p>Flags unusual bulk downloads before a departure date, with HR context.</p></div>
+    <div class="card"><h3>Ransomware precursors</h3><p>Catches disabled tools and odd scheduled tasks before encryption begins.</p></div>
+  </div>
+</div></section>
+
+<section id="pricing"><div class="wrap">
+  <span class="eyebrow">Editions</span>
+  <h2>Sized to your environment</h2>
+  <p class="sub">Pricing is based on data volume, protected assets and deployment model. Talk to us for a tailored quote.</p>
+  <div class="grid g3">
+    <div class="card"><h3>Essentials</h3><p>Small and mid-size organizations.</p><div class="price">Contact us</div>
+      <ul><li>Core detection library</li><li>Standard retention</li><li>Email / ticket support</li></ul><a class="btn" href="#demo">Talk to sales</a></div>
+    <div class="card feat"><span class="badge">Most popular</span><h3>Professional</h3><p>Mid-size to large enterprises.</p><div class="price">Contact us</div>
+      <ul><li>Full UEBA &amp; ML detection suite</li><li>Extended retention</li><li>Response automation</li><li>Priority support</li></ul><a class="btn p" href="#demo">Request a demo</a></div>
+    <div class="card"><h3>Enterprise</h3><p>Large or regulated enterprises and MSSPs.</p><div class="price">Custom</div>
+      <ul><li>Dedicated or self-hosted deployment</li><li>Advanced compliance reporting</li><li>Dedicated technical account manager</li></ul><a class="btn" href="#demo">Talk to sales</a></div>
+  </div>
+</div></section>
+
+<section id="faq" class="band"><div class="wrap">
+  <span class="eyebrow">FAQ</span>
+  <h2>Questions, answered</h2>
+  <details><summary>Does ThreatLens replace my SIEM or EDR?</summary><p>No. It sits above your existing tools, ingests their telemetry and adds correlation and behavioral analytics no single tool can perform alone.</p></details>
+  <details><summary>How is it deployed?</summary><p>Three options: managed SaaS (days to onboard), dedicated single-tenant cloud (1–2 weeks), or self-hosted for air-gapped and highly regulated environments.</p></details>
+  <details><summary>Can I trust automated findings?</summary><p>Every finding keeps its underlying evidence and top contributing factors, so analysts can verify why it was flagged. Automation is analyst-in-the-loop by default.</p></details>
+  <details><summary>How long until I see value?</summary><p>Implementation is phased: discovery and sizing, core onboarding in 2–4 weeks, then tuning and expansion. Expect a tuning period while behavioral baselines learn your environment.</p></details>
+  <details><summary>Can MSSPs use it?</summary><p>Yes. A partner program includes multi-tenant management tooling for teams monitoring many client environments.</p></details>
+</div></section>
+
+<section id="demo"><div class="wrap">
+  <div class="final">
+    <h2>See your threats as one story.</h2>
+    <p>Start with a scoped proof-of-concept on a representative slice of your environment.</p>
+    <a class="btn p" href="mailto:hello@threatlens.example">Request a demo</a>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="fcols">
+    <div><a class="logo" href="#top">Threat<span>Lens</span></a><p style="margin-top:10px">A unified security threat analysis platform.</p></div>
+    <div><h5>Product</h5><a href="#features">Features</a><a href="#how">How it works</a><a href="#pricing">Editions</a></div>
+    <div><h5>Company</h5><a href="#">About</a><a href="#">Contact</a></div>
+    <div><h5>Legal</h5><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a></div>
+  </div>
+  <div class="copy">© 2026 ThreatLens. Final project — illustrative product, not a commercial offering.</div>
+</div></footer>
+</body>
+</html>
